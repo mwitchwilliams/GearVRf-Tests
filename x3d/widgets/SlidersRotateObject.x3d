@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.3//EN" "http://www.web3d.org/specifications/x3d-3.3.dtd">
+<X3D profile='Immersive' version='3.3' xmlns:xsd='http://www.w3.org/2001/XMLSchema-instance' xsd:noNamespaceSchemaLocation='http://www.web3d.org/specifications/x3d-3.3.xsd'>
+  <Scene>
+  
+
+    <Viewpoint DEF='VP1' position='0 0 0'/>
+    <PointLight DEF='PL1' location='0 0 2' color='1 1 1'/>
+    
+    
+    <Transform DEF='developerMode'>
+
+       <DirectionalLight DEF='DL1' color='.3 .3 .3'/>
+
+       <Transform DEF='MainObject' translation='0 5 -40' scale='.25 .25 .25'>
+             <TouchSensor DEF='MainObjectTouchSensor' description='main object controller'/>
+             <Transform DEF='MainObjectXRotate' rotation='1 0 0 0'>
+                <Transform DEF='MainObjectYRotate' rotation='0 1 0 0'>
+                    <Transform DEF='MainObjectZRotate' rotation='0 0 1 0'>
+                        <Inline url="teapot.x3d"/>
+                    </Transform>
+                </Transform>
+             </Transform>
+        </Transform>
+
+
+
+	<Transform DEF="ResetObject" translation='4 0 -10'>
+        	<TouchSensor DEF='ResetTouch'/>
+			<Shape>
+				<Appearance>
+					<Material DEF='ResetMaterial' diffuseColor='.5 .5 .5'/>
+		    		<ImageTexture url="reset.png"/>
+          		</Appearance>
+				<IndexedFaceSet  DEF='texturedPlaneIFS' coordIndex='0 1 2 -1    0 3 1 -1'  texCoordIndex='0 1 2 -1   0 3 1 -1'  normalIndex='0 0 0 -1   0 0 0 -1'>
+					<Coordinate point='-1 -1 -0.0    1 1 -0.0    -1 1 0    1 -1 0' />
+					<TextureCoordinate point='0 0   1 1    0 1   1 0'/>
+					<Normal vector='0 0 1'/>
+				</IndexedFaceSet>
+			</Shape>
+	</Transform>
+
+
+
+        <Transform DEF='lightZdepthMenu' translation='-6 -6 -24' >
+                <transform DEF="zNegMenu" translation=".75 .75 -.5">
+                    <TouchSensor DEF='zNegMenuTouchSensor' description='xMenu controller'/>
+        	        <shape>
+                        <Appearance>
+        				    <Material DEF='zNegMenuMat' diffuseColor=".5 .5 .5"/>
+        				    <ImageTexture url='pointlightbuttonnegz.png'/>
+        		        </Appearance>
+        		        <IndexedFaceSet DEF='menuIFS'
+        				    coordIndex='0 1 2 -1    0 3 1 -1'
+        				    texCoordIndex='0 1 2 -1   0 3 1 -1'
+        				    normalIndex='0 0 0 -1   0 0 0 -1' >
+                            <Coordinate point='-1 -1 0    1 1 0    -1 1 0    1 -1 0' />
+                            <TextureCoordinate point='0 0   1 1    0 1   1 0'/>
+                            <Normal vector='0 0 1'/>
+                        </IndexedFaceSet>
+        	        </shape>
+                </transform>
+                <transform DEF="zPosMenu" translation="-.75 -.75 0">
+                    <TouchSensor DEF='zPosMenuTouchSensor' description='zMenu controller'/>
+        	        <shape>
+        			<Appearance>
+        				<Material DEF='zPosMenuMat' diffuseColor=".5 .5 .5"/>
+        				<ImageTexture url="pointlightbuttonposz.png"/>
+        			</Appearance>
+        			<IndexedFaceSet USE='menuIFS'/>
+        	        </shape>
+                </transform>
+        </Transform>
+
+    <Transform DEF="LightControllers"  translation='0 -5 0'>
+
+      <Transform DEF="xAxisController"  translation='0 1.25 0'>
+        <TouchSensor DEF='xAxisControllerTouchSensor' description='red controller'/>
+        <Transform DEF="RedRotate">
+            <Transform DEF="xAxisControllerTranslate"  translation='0 0 -10'>
+            <Shape>
+		      <!-- Text DEF='TextMessage1' string='"X"'/ -->
+              <Appearance>
+                <Material DEF="xAxisControllerMaterial" diffuseColor='.4 0 0' emissiveColor='1 0 0' specularColor='.1 0 0'/>
+              </Appearance>
+              <Box size='.7 .7 .7'/>
+            </Shape>
+          </Transform>
+        </Transform>
+      </Transform>
+
+      <Transform DEF="yAxisController" translation='0 0 0'>
+        <TouchSensor DEF='yAxisControllerTouchSensor' description='green controller'/>
+        <Transform DEF="yAxisControllerTranslate"  translation='0 0 -10'>
+            <Shape>
+              <Appearance>
+                <Material DEF="yAxisControllerMaterial" diffuseColor='0 .4 0' emissiveColor='0 .6 0'/>
+              </Appearance>
+              <Box size='.7 .7 .7'/>
+            </Shape>
+          </Transform>
+      </Transform>
+
+      <Transform DEF="zAxisController" translation='0 -1.25 0'>
+        <TouchSensor DEF='zAxisControllerTouchSensor' description='touch to toggle'/>
+        <Transform DEF="zAxisControllerTranslate"  translation='0 0 -10'>
+            <Shape>
+              <Appearance>
+                <Material DEF="zAxisControllerMaterial" diffuseColor='0 0 1' emissiveColor='0 0 1'/>
+              </Appearance>
+              <Box size='.7 .7 .7'/>
+            </Shape>
+          </Transform>
+      </Transform>
+
+    </Transform>  <!-- end LightControllers Transform -->
+
+
+  </Transform>  <!-- end developerMode Transform -->
+
+
+
+
+   <!-- BEGIN SCRIPTS -->
+   <Script DEF='IsOverxAxisControllerScript'>
+        <field accessType='inputOnly' name='IsOverxAxisController' type='SFBool'/>
+        <field accessType='outputOnly' name='material' type='SFColor'/>
+
+        <![CDATA[
+            ecmascript:
+    	    function initialize() {
+    	        offColor = .3;
+    	        onColor = 1;
+    	        xAxisControllerSelected = false;
+    	    }
+            function IsOverxAxisController( isOverBoolean )
+            {
+              	if ( isOverBoolean ) {
+              	    xAxisControllerSelected = true;
+              	    red = onColor;
+              	}
+              	else {
+              	    xAxisControllerSelected = false;
+              	    red = offColor;
+              	}
+              	material = new SFColor (red, 0, 0);
+            }
+        ]]>
+   </Script>
+   <ROUTE fromField='isOver' fromNode='xAxisControllerTouchSensor' toField='IsOverxAxisController' toNode='IsOverxAxisControllerScript'/>
+   <ROUTE fromField='material' fromNode='IsOverxAxisControllerScript' toField='diffuseColor' toNode='xAxisControllerMaterial'/>
+
+
+
+
+   <Script DEF='IsOveryAxisControllerScript'>
+        <field accessType='inputOnly' name='IsOveryAxisController' type='SFBool'/>
+        <field accessType='outputOnly' name='material' type='SFColor'/>
+
+        <![CDATA[
+          ecmascript:
+          function initialize() {
+                yAxisControllerSelected = false;
+          }
+          function IsOveryAxisController( isOverBoolean )
+          {
+          	 if ( isOverBoolean ) {
+          	    green = onColor;
+          	    yAxisControllerSelected = true;
+          	}
+          	else {
+          	    green = offColor;
+          	    yAxisControllerSelected = false;
+          	}
+          	material = new SFColor (0, green, 0);
+          }
+    	]]>
+   </Script>
+   <ROUTE fromField='isOver' fromNode='yAxisControllerTouchSensor' toField='IsOveryAxisController' toNode='IsOveryAxisControllerScript'/>
+   <ROUTE fromField='material' fromNode='IsOveryAxisControllerScript' toField='diffuseColor' toNode='yAxisControllerMaterial'/>
+
+
+
+   <Script DEF='IsOverzAxisControllerScript'>
+        <field accessType='inputOnly' name='IsOverzAxisController' type='SFBool'/>
+        <field accessType='outputOnly' name='material' type='SFColor'/>
+
+        <![CDATA[
+          ecmascript:
+          function initialize() {
+                zAxisControllerSelected = false;
+          }
+          function IsOverzAxisController( isOverBoolean )
+          {
+          	if ( isOverBoolean ) {
+          	    blue = onColor;
+          	    zAxisControllerSelected = true;
+          	}
+          	else {
+          	    blue = offColor;
+          	    zAxisControllerSelected = false;
+          	}
+          	material = new SFColor (0, 0, blue);
+          }
+    	]]>
+   </Script>
+   <ROUTE fromField='isOver' fromNode='zAxisControllerTouchSensor' toField='IsOverzAxisController' toNode='IsOverzAxisControllerScript'/>
+   <ROUTE fromField='material' fromNode='IsOverzAxisControllerScript' toField='diffuseColor' toNode='zAxisControllerMaterial'/>
+
+
+
+   <Script DEF='IsOverZNegMenuControllerScript'>
+        <field accessType='inputOnly' name='IsOverZNegMenuController' type='SFBool'/>
+         <field accessType='outputOnly' name='material' type='SFColor'/>
+
+         <![CDATA[
+          ecmascript:
+            function initialize() {
+                zNegMenuSelected = false;
+                zPosMenuSelected = false;
+            }
+          function IsOverZNegMenuController(value)
+          {
+          	if (value) {
+          	    color = onColor;
+          	    zNegMenuSelected = true;
+          	}
+          	else {
+          	    color = offColor;
+           	    zNegMenuSelected = false;
+         	}
+          	material = new SFColor (color, color, color);
+          }
+    	]]>
+   </Script>
+   <ROUTE fromField='isOver' fromNode='zNegMenuTouchSensor' toField='IsOverZNegMenuController' toNode='IsOverZNegMenuControllerScript'/>
+   <ROUTE fromField='material' fromNode='IsOverZNegMenuControllerScript' toField='diffuseColor' toNode='zNegMenuMat'/>
+
+
+
+   <Script DEF='IsOverZPosMenuControllerScript'>
+        <field accessType='inputOnly' name='IsOverZPosMenuController' type='SFBool'/>
+        <field accessType='outputOnly' name='material' type='SFColor'/>
+
+        <![CDATA[
+          ecmascript:
+          function IsOverZPosMenuController(value)
+          {
+          	if (value) {
+          	    color = onColor;
+          	    zPosMenuSelected = true;
+          	}
+          	else {
+          	    color = offColor;
+          	    zPosMenuSelected = false;
+          	}
+    		material = new SFColor (color, color, color);
+          }
+    	]]>
+   </Script>
+   <ROUTE fromField='isOver' fromNode='zPosMenuTouchSensor' toField='IsOverZPosMenuController' toNode='IsOverZPosMenuControllerScript'/>
+   <ROUTE fromField='material' fromNode='IsOverZPosMenuControllerScript' toField='diffuseColor' toNode='zPosMenuMat'/>
+
+
+
+    <Script DEF='ResetScript'>
+          <field accessType='inputOnly' name='buttonOverReset' type='SFBool'/>
+          <field accessType='outputOnly' name='material' type='SFColor'/>
+
+          <![CDATA[
+          ecmascript:
+          function buttonOverReset(value)
+          {
+          	if (value) material = new SFColor (1, 1, 1);
+          	else material = new SFColor (.5, .5, .5);
+          }
+    	]]>
+    </Script>
+
+    <ROUTE fromField='isOver' fromNode='ResetTouch' toField='buttonOverReset' toNode='ResetScript'/>
+    <ROUTE fromField='material' fromNode='ResetScript' toField='diffuseColor' toNode='ResetMaterial'/>
+
+
+    <Script DEF='ClickResetScript'>
+         <field accessType='inputOnly' name='buttonResetClick' type='SFBool'/>
+
+         <field accessType='outputOnly' name='objectXAxisRotation' type='SFRotation'/>
+         <field accessType='outputOnly' name='objectYAxisRotation' type='SFRotation'/>
+         <field accessType='outputOnly' name='objectZAxisRotation' type='SFRotation'/>
+
+         <field accessType='inputOutput' name='xAxisCtrlTranslation' type='SFVec3f'/>
+         <field accessType='inputOutput' name='yAxisCtrlTranslation' type='SFVec3f'/>
+         <field accessType='inputOutput' name='zAxisCtrlTranslation' type='SFVec3f'/>
+         <!-- field accessType='inputOutput' name='MainObjectTranslation' type='SFVec3f'/ -->
+
+         <![CDATA[
+              ecmascript:
+              function buttonResetClick(value)
+              {
+                 xAxisCtrlTranslation.setValue( 0, 0, xAxisCtrlTranslation.getZ() );
+                 yAxisCtrlTranslation.setValue( 0, 0, yAxisCtrlTranslation.getZ() );
+                 zAxisCtrlTranslation.setValue( 0, 0, zAxisCtrlTranslation.getZ() );
+                 objectXAxisRotation = new SFRotation( 0, 1, 0, 0);
+
+                 objectYAxisRotation = new SFRotation( 0, 0, 1, 0);
+                 objectZAxisRotation = new SFRotation( 0, 0, 0, 1);
+              }
+         ]]>
+    </Script>
+
+        <ROUTE fromField='isActive' fromNode='ResetTouch' toField='buttonResetClick' toNode='ClickResetScript'/>
+
+        <ROUTE fromField='translation' fromNode='xAxisControllerTranslate' toField='xAxisCtrlTranslation' toNode='ClickResetScript'/>
+        <ROUTE fromField='xAxisCtrlTranslation' fromNode='ClickResetScript' toField='translation' toNode='xAxisControllerTranslate'/>
+        <ROUTE fromField='translation' fromNode='yAxisControllerTranslate' toField='yAxisCtrlTranslation' toNode='ClickResetScript'/>
+        <ROUTE fromField='yAxisCtrlTranslation' fromNode='ClickResetScript' toField='translation' toNode='yAxisControllerTranslate'/>
+        <ROUTE fromField='translation' fromNode='zAxisControllerTranslate' toField='zAxisCtrlTranslation' toNode='ClickResetScript'/>
+        <ROUTE fromField='zAxisCtrlTranslation' fromNode='ClickResetScript' toField='translation' toNode='zAxisControllerTranslate'/>
+
+        <ROUTE fromField='objectXAxisRotation' fromNode='ClickResetScript' toField='rotation' toNode='MainObjectXRotate'/>
+        <ROUTE fromField='objectYAxisRotation' fromNode='ClickResetScript' toField='rotation' toNode='MainObjectYRotate'/>
+        <ROUTE fromField='objectZAxisRotation' fromNode='ClickResetScript' toField='rotation' toNode='MainObjectZRotate'/>
+
+
+    <Script DEF='IsActiveMainObjectControllerScript'>
+        <field accessType='inputOnly' name='IsActiveMainObjectController' type='SFBool'/>
+
+        <![CDATA[
+            ecmascript:
+	        function initialize() {
+	            MainObjectSelected = false;
+	        }
+            function IsActiveMainObjectController( value )
+            {
+                MainObjectSelected = !MainObjectSelected;
+            }
+        ]]>
+     </Script>
+
+     <ROUTE fromField='isActive' fromNode='MainObjectTouchSensor' toField='IsActiveMainObjectController' toNode='IsActiveMainObjectControllerScript'/>
+
+
+    <TimeSensor DEF='AnimationClock' cycleInterval='1' loop='true'/>
+    <Script DEF='AnimateScript' mustEvaluate='true'>
+        <field accessType='inputOnly' name='perFrameCall' type='SFFloat'/>
+        <field accessType='inputOnly' name='vpRot' type='SFRotation'/>
+
+        <field accessType='inputOutput' name='xAxisRotation' type='SFRotation'/>
+        <field accessType='inputOutput' name='yAxisRotation' type='SFRotation'/>
+        <field accessType='inputOutput' name='zAxisRotation' type='SFRotation'/>
+
+        <field accessType='inputOutput' name='xAxisCtrlTranslation' type='SFVec3f'/>
+        <field accessType='inputOutput' name='yAxisCtrlTranslation' type='SFVec3f'/>
+        <field accessType='inputOutput' name='zAxisCtrlTranslation' type='SFVec3f'/>
+        <field accessType='inputOutput' name='MainObjectTranslation' type='SFVec3f'/>
+
+        <![CDATA[
+	    ecmascript:
+            function initialize() {
+            }
+            function perFrameCall (eventValue) {
+
+                 MainObjectX = MainObjectTranslation.getX();
+                 MainObjectY = MainObjectTranslation.getY();
+                 MainObjectZ = MainObjectTranslation.getZ();
+
+                 currQuaternion = new Quaternionf(vpRot);
+                 matrix = new Matrix4f();
+                 currQuaternion.get(matrix);
+                 camDirVector = new SFVec3f(0,0,-1);
+                 camDirVector.mulDirection( matrix, camDirVector );
+
+                 if ( xAxisControllerSelected ) {
+                     xRotateAmt = camDirVector.getX()*xAxisCtrlTranslation.getZ()/camDirVector.getZ();
+                     if ( xRotateAmt < -2*Math.PI ) xRotateAmt = -2*Math.PI;
+                     else if ( xRotateAmt > 2*Math.PI ) xRotateAmt = 2*Math.PI;
+                     xAxisCtrlTranslation.setValue( xRotateAmt, 0, xAxisCtrlTranslation.getZ() );
+                     xAxisRotation.setValue( xRotateAmt, 1, 0, 0);
+                 }
+                 else if ( yAxisControllerSelected ) {
+                     yRotateAmt = camDirVector.getX()*yAxisCtrlTranslation.getZ()/camDirVector.getZ();
+                     if ( yRotateAmt < -2.5 ) yRotateAmt = -2.5;
+                     else if ( yRotateAmt > 2.5 ) yRotateAmt = 2.5;
+                     yAxisCtrlTranslation.setValue( yRotateAmt, 0, yAxisCtrlTranslation.getZ() );
+                     yAxisRotation.setValue( yRotateAmt, 0, 1, 0);
+                 }
+                 else if ( zAxisControllerSelected ) {
+                     zRotateAmt = camDirVector.getX()*zAxisCtrlTranslation.getZ()/camDirVector.getZ();
+                     if ( zRotateAmt < -2.5 ) zRotateAmt = -2.5;
+                     else if ( zRotateAmt > 2.5 ) zRotateAmt = 2.5;
+                     zAxisCtrlTranslation.setValue( zRotateAmt, 0, zAxisCtrlTranslation.getZ() );
+                     zAxisRotation.setValue( zRotateAmt, 0, 0, 1);
+                 }
+                 else if ( MainObjectSelected ) {
+                     MainObjectX = camDirVector.getX()*MainObjectTranslation.getZ()/camDirVector.getZ();
+                     MainObjectY = camDirVector.getY()*MainObjectTranslation.getZ()/camDirVector.getZ();
+                 }
+                 else if ( zPosMenuSelected ) MainObjectZ = MainObjectTranslation.getZ() + .05;
+                 else if ( zNegMenuSelected )  MainObjectZ = MainObjectTranslation.getZ() - .05;
+                 MainObjectTranslation.setValue( MainObjectX, MainObjectY, MainObjectZ );
+            }
+	    ]]>
+    </Script>
+
+    <ROUTE fromField='fraction_changed' fromNode='AnimationClock' toField='perFrameCall' toNode='AnimateScript'/>
+
+    <ROUTE fromField='orientation' fromNode='VP1' toField='vpRot' toNode='AnimateScript'/>
+
+    <ROUTE fromField='translation' fromNode='MainObject' toField='MainObjectTranslation' toNode='AnimateScript'/>
+    <ROUTE fromField='MainObjectTranslation' fromNode='AnimateScript' toField='translation' toNode='MainObject'/>
+
+    <ROUTE fromField='translation' fromNode='xAxisControllerTranslate' toField='xAxisCtrlTranslation' toNode='AnimateScript'/>
+    <ROUTE fromField='xAxisCtrlTranslation' fromNode='AnimateScript' toField='translation' toNode='xAxisControllerTranslate'/>
+    <ROUTE fromField='translation' fromNode='yAxisControllerTranslate' toField='yAxisCtrlTranslation' toNode='AnimateScript'/>
+    <ROUTE fromField='yAxisCtrlTranslation' fromNode='AnimateScript' toField='translation' toNode='yAxisControllerTranslate'/>
+    <ROUTE fromField='translation' fromNode='zAxisControllerTranslate' toField='zAxisCtrlTranslation' toNode='AnimateScript'/>
+    <ROUTE fromField='zAxisCtrlTranslation' fromNode='AnimateScript' toField='translation' toNode='zAxisControllerTranslate'/>
+
+    <ROUTE fromField='rotation' fromNode='MainObjectXRotate' toField='xAxisRotation' toNode='AnimateScript'/>
+    <ROUTE fromField='xAxisRotation' fromNode='AnimateScript' toField='rotation' toNode='MainObjectXRotate'/>
+    <ROUTE fromField='rotation' fromNode='MainObjectYRotate' toField='yAxisRotation' toNode='AnimateScript'/>
+    <ROUTE fromField='yAxisRotation' fromNode='AnimateScript' toField='rotation' toNode='MainObjectYRotate'/>
+    <ROUTE fromField='rotation' fromNode='MainObjectZRotate' toField='zAxisRotation' toNode='AnimateScript'/>
+    <ROUTE fromField='zAxisRotation' fromNode='AnimateScript' toField='rotation' toNode='MainObjectZRotate'/>
+
+  </Scene>
+</X3D>
