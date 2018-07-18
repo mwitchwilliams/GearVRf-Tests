@@ -126,7 +126,7 @@
       <Group DEF="CircleButton_MeshItem">
         <Shape DEF="arcadebutton_Shape">
           <Appearance DEF="Material_Surf">
-            <Material diffuseColor="0.792882 0 0" specularColor="0.04 0.04 0.04" shininess="0.6"/>
+            <Material DEF="buttonColor" diffuseColor="0.792882 0 0" specularColor="0.04 0.04 0.04" shininess="0.6"/>
           </Appearance>
           <IndexedFaceSet creaseAngle="0.698132" coordIndex="108,48,109,-1, 46,109,48,-1, 64,66,65,-1, 67,65,66,-1, 
             32,34,33,-1, 35,33,34,-1, 49,12,47,-1, 11,47,12,-1, 
@@ -224,6 +224,7 @@
     <Script DEF='ButtonScript'>
       <field accessType='inputOnly' name='buttonActive' type='SFBool'/>
       <field accessType='outputOnly' name='toggleButtonLocation' type='SFVec3f'/>
+      <field accessType='outputOnly' name='newButtonColor' type='SFColor'/>
 
       <![CDATA[
       ecmascript:
@@ -235,9 +236,11 @@
       {
       	if (value) {
             toggleButtonLocation = new SFVec3f(0, -.02, 0);
+            newButtonColor = new SFColor(1, .2, .2);
         }
         else {
             toggleButtonLocation = new SFVec3f(0, 0, 0);
+            newButtonColor = new SFColor(0.792882, 0, 0);
         }
       }
 	]]>
@@ -245,6 +248,7 @@
 
     <ROUTE fromField='isActive' fromNode='ButtonTouchSensor' toField='buttonActive' toNode='ButtonScript'/>
     <ROUTE fromField='toggleButtonLocation' fromNode='ButtonScript' toField='translation' toNode='CircleButton_XForm'/>
+    <ROUTE fromField='newButtonColor' fromNode='ButtonScript' toField='diffuseColor' toNode='buttonColor'/>
 
   </Scene>
 </X3D>

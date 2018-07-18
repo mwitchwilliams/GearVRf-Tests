@@ -6,6 +6,17 @@
       <DirectionalLight/>
       <Background skyColor='.4 .4 .5'/>
 
+
+        <Transform translation="0 -.35 -1">
+	        <Shape>
+	          <Text DEF='ButtonTextValue' string='" off "'/>
+	          <Appearance>
+	            <Material diffuseColor='1 .5 0'/>
+	          </Appearance>
+	        </Shape>
+	    </Transform>
+
+
     <Transform rotation='1 0 0 1.1'>
         <TouchSensor DEF='ButtonTouchSensor' description='touch to toggle'/>
 
@@ -174,6 +185,7 @@
     <Script DEF='ButtonScript'>
       <field accessType='inputOnly' name='buttonActive' type='SFBool'/>
       <field accessType='outputOnly' name='toggleButtonLocation' type='SFVec3f'/>
+      <field accessType='outputOnly' name='currentTextValue' type='MFString'/>
 
       <![CDATA[
       ecmascript:
@@ -186,10 +198,12 @@
       	if (value) {
       	    buttonIn = !buttonIn;
             if (buttonIn) {
-                toggleButtonLocation = new SFVec3f(0, -.01, 0);
+                toggleButtonLocation = new SFVec3f(0, -.008, 0);
+                currentTextValue = new MFString("ON");
             }
             else {
                 toggleButtonLocation = new SFVec3f(0, 0, 0);
+                currentTextValue = new MFString("off");
             }
         }
       }
@@ -198,6 +212,7 @@
 
     <ROUTE fromField='isActive' fromNode='ButtonTouchSensor' toField='buttonActive' toNode='ButtonScript'/>
     <ROUTE fromField='toggleButtonLocation' fromNode='ButtonScript' toField='translation' toNode='RadialButton_XForm'/>
+    <ROUTE fromField='currentTextValue' fromNode='ButtonScript' toField='string' toNode='ButtonTextValue'/>
 
   </Scene>
 </X3D>

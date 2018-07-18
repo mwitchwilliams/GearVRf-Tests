@@ -1,23 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.1//EN"
-	"http://www.web3d.org/specifications/x3d-3.1.dtd">
 <X3D version="3.1" profile="Interchange">
-  <!-- head>
-    <meta name="creator" content="Michael Badillo"/>
-    <meta name="rights" content="Michael Badillo"/>
-    <meta name="created" content="6/1/2018 4:24:51 PM"/>
-    <meta name="generator" content="modo, http://www.luxology.com/"/>
-    <meta name="modified" content="6/1/2018 4:24:51 PM"/>
-    <meta name="title" content="Untitled (2)"/>
-  </head -->
   <Scene>
 
       <NavigationInfo headline='false'/>
-      <Viewpoint description='Front View' position='0 0 10'/>
+      <Viewpoint description='Front View' position='0 0 .25'/>
       <DirectionalLight/>
       <Background skyColor='.4 .4 .5'/>
 
-    <Transform scale='100 100 100' rotation='1 0 0 1.57'>
+    <Transform rotation='1 0 0 1.1'>
 
     <Transform DEF="CheckboxBase_XForm">
         <TouchSensor DEF='ChangeCheckBox' description='touch to toggle'/>

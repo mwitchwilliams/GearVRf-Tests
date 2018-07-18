@@ -7,6 +7,22 @@
       <DirectionalLight/>
       <Background skyColor='.6 .6 .7'/>
 
+
+
+    <Transform translation="0 -.5 -1">
+      <Transform rotation='.707 0 -.707 1'>
+		<Shape>
+	          <Box size='.5 .5 .5'/>
+	          <Appearance>
+	            <Material diffuseColor="1 1 1"/>
+	            <ImageTexture DEF='MyImg' url="left.png"/>
+	          </Appearance>
+		</Shape>
+	  </Transform>
+	</Transform>
+
+
+
     <Transform rotation='1 0 0 1.1'>
 
 
@@ -152,6 +168,7 @@
     <Script DEF='ToggleButtonScript'>
       <field accessType='inputOnly' name='buttonActive' type='SFBool'/>
       <field accessType='outputOnly' name='toggleButtonLocation' type='SFVec3f'/>
+      <field accessType='outputOnly' name='imgURL' type='MFString'/>
 
       <![CDATA[
       ecmascript:
@@ -165,9 +182,11 @@
       	    onRight = !onRight;
       	    if ( onRight ) {
                 toggleButtonLocation = new SFVec3f(0.08, 0, 0);
+                imgURL = new MFString("right.png");;
       	    }
             else {
                 toggleButtonLocation = new SFVec3f(-0.08, 0, 0);
+                imgURL = new MFString("left.png");;
             }
       	}
       }
@@ -176,6 +195,7 @@
 
     <ROUTE fromField='isActive' fromNode='ToggleTouchSensor' toField='buttonActive' toNode='ToggleButtonScript'/>
     <ROUTE fromField='toggleButtonLocation' fromNode='ToggleButtonScript' toField='translation' toNode='ToggleBase_XForm'/>
+    <ROUTE fromField='imgURL' fromNode='ToggleButtonScript' toField='url' toNode='MyImg'/>
 
   </Scene>
 </X3D>

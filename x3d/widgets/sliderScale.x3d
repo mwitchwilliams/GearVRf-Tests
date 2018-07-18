@@ -14,6 +14,7 @@
 	          <Box size='.5 .5 .5'/>
 	          <Appearance>
 	            <Material diffuseColor="1 1 0"/>
+	            <ImageTexture DEF='MyImg' url="red.jpg"/>
 	          </Appearance>
 		</Shape>
 	  </Transform>
